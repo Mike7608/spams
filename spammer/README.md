@@ -1,1 +1,1 @@
-# Курсовая работа Django 4 <<Spammer>>
+# Курсовая работа Django 4 "SPAMMER"
