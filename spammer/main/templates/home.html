@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% load countrow %}
+  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+    <div class="col-lg-6 px-0">
+      <h1 class="display-4 fst-italic">Статистика</h1>
+      <p class="lead my-3">Некоторая информация по статистике</p>
+      <p class="lead mb-0">и другое</p>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary-emphasis"></strong>
+          <h3 class="mb-0">Клиенты</h3>
+          <div class="mb-1 text-body-secondary">Всего: {% count_row_clients %}</div>
+          <p class="card-text mb-auto">Клиенты участвующие в рассылке</p>
+          <a href="{% url 'clients:list' %}" class="icon-link gap-1 icon-link-hover stretched-link">
+            Страница "Клиенты"
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <image href="{% static 'icon/user.png' %}" x="20" y="20" width="160" height="210" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis"></strong>
+          <h3 class="mb-0">Сообщения</h3>
+          <div class="mb-1 text-body-secondary">Всего: {% count_row_message %}</div>
+          <p class="mb-auto">Текст последнего сообщения</p>
+          <a href="{% url 'message:list' %}" class="icon-link gap-1 icon-link-hover stretched-link">
+            Страница "Сообщения"
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <image href="{% static 'icon/email.png' %}" x="20" y="20" width="160" height="210" />
+          </svg>
+        </div>
+      </div>
+    </div>
+        <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-primary-emphasis"></strong>
+          <h3 class="mb-0">Рассылки</h3>
+          <div class="mb-1 text-body-secondary"></div>
+          <p class="card-text mb-auto">Настройки рассылки писем</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Страница "Рассылки"
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <image href="{% static 'icon/setting.png' %}" x="20" y="20" width="160" height="210" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis"></strong>
+          <h3 class="mb-0">Журнал</h3>
+          <div class="mb-1 text-body-secondary">Всего записей: 95</div>
+          <p class="mb-auto">Журнал рассылок</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Страница "Журнал"
+            <svg class="bi"><use xlink:href="#chevron-right"/></svg>
+          </a>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <rect width="100%" height="100%" fill="#55595c"/>
+            <image href="{% static 'icon/log.png' %}" x="20" y="20" width="160" height="210" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

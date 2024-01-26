@@ -1,0 +1,52 @@
+<header class="border-bottom lh-2 py-3 bg-body-tertiary">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">MK' SPAMMER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'clients:list' %}">Клиенты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'message:list' %}">Сообщения</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Рассылка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Журнал</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    {% if user.is_authenticated %}
+                    <h6>{{ user.first_name }} {{ user.last_name }}<span class="badge bg-secondary">{{ user.email }}</span></h6>
+                    <div class="container d-flex justify-content-end align-items-center">
+                        <button type="button" class="btn btn-outline-secondary me-2"
+                                onclick="location.href='{% url 'users:logout' %}'">Выход
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="location.href='{% url 'users:profile' %}'">Профиль
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="container d-flex justify-content-end align-items-center">
+                        <button type="button" class="btn btn-outline-secondary me-2"
+                                onclick="location.href='{% url 'users:login' %}'">Вход
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="location.href='{% url 'users:register' %}'">Регистрация
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>

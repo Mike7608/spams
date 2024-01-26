@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load mediapath %}
+<div class="p-5 mb-5 bg-body-tertiary">
+    <main class="form-signin">
+      <form method="post" enctype="multipart/form-data">
+        <h1 class="h3 mb-3 fw-normal">Мой профиль:</h1>
+          {% csrf_token %}
+          {{ form.as_p }}
+        <button class="btn btn-primary " type="submit">Сохранить</button>
+      </form>
+    </main>
+</div>
+{% endblock %}
