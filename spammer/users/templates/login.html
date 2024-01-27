@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'message.html' %}
-<div class="p-5 mb-5 bg-body-tertiary">
-    <main class="form-signin">
-        <form method="post" enctype="multipart/form-data">
-         <div class="py-1 mb-3 border-bottom">
-            <h1 class="h3 mb-3 fw-normal">Вход:</h1>
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="py-1 mb-3 h1">
-                <button class="btn btn-primary " type="submit">Войти</button>
-            </div>
-         </div>
-                <p>
-                    <a href="{% url 'users:password_reset' %}">Восстановить пароль</a>
-                </p>
-                <p>
-                    <a href="{% url 'users:password_new_gen' %}">Генерировать новый пароль</a>
-                </p>
-        </form>
-    </main>
+<div class="container col-3" style="width: 350px;">
+     <div class="card  mb-5 p-5 rounded bg-body-tertiary">
+            <form method="post" enctype="multipart/form-data">
+             <div class="py-1 mb-3 border-bottom">
+                <h1 class="h3 mb-3 fw-normal">Вход:</h1>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="py-1 mb-3 h1">
+                    <button class="btn btn-primary " type="submit">Войти</button>
+                </div>
+             </div>
+                    <p>
+                        <a href="{% url 'users:password_reset' %}">Восстановить пароль</a>
+                    </p>
+                    <p>
+                        <a href="{% url 'users:password_new_gen' %}">Генерировать новый пароль</a>
+                    </p>
+            </form>
+    </div>
 </div>
+
 {% endblock %}
