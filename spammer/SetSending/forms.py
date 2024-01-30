@@ -11,7 +11,7 @@ class SetSendingForm(StyleFormMixin, forms.ModelForm):
         fields = ['time_start', 'time_end', 'interval', 'status', 'list_address', 'message']
 
 
-class AddSending(forms.Form):
+class AddSending(forms.Form):  #  ПРОБНАЯ РАБОТА В ВИДЖЕТАМИ
     time_start = forms.DateTimeField(widget=forms.SelectDateWidget(attrs={'class': 'form-control'}), label='Время начала рассылки')
     time_end = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'class': 'form-control'}))
     interval = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control'}))
