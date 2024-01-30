@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-from spammer.services import NULLABLE
+from spammer.settings import NULLABLE
 
 
 class User(AbstractUser):

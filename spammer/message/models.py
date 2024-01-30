@@ -1,6 +1,6 @@
 from django.db import models
-from spammer.services import NULLABLE
 from users.models import User
+from spammer.settings import NULLABLE
 
 
 class Message(models.Model):

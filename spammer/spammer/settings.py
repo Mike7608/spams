@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'clients',
     'message',
     'SetSending',
+    'Logs',
 ]
 
 MIDDLEWARE = [
@@ -180,3 +181,5 @@ SITE_ID = 1
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+NULLABLE = {'null': True, 'blank': True}

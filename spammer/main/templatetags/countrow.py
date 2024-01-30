@@ -1,4 +1,6 @@
 from django import template
+
+from Logs.models import Logs
 from clients.models import Client
 from message.models import Message
 from SetSending.models import SetSending
@@ -19,3 +21,8 @@ def count_row_message():
 @register.simple_tag
 def count_row_setsending():
     return SetSending.objects.count()
+
+
+@register.simple_tag
+def count_row_logs():
+    return Logs.objects.count()

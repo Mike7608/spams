@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-
 from SetSending.forms import SetSendingForm, AddSending
 from SetSending.models import SetSending
+from spammer.services import JobService
 
 
 class SetSendingListView(ListView):
@@ -20,6 +20,8 @@ class SetSendingCreateView(CreateView):
         new_setting = form.save(commit=False)
         new_setting.user = self.request.user
         new_setting.save()
+        jobs = JobService()
+        jobs.add_job(new_setting.time_start, new_setting.time_end, new_setting.interval, new_setting.pk)
         return super().form_valid(form)
 
 

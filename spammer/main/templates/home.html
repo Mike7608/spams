@@ -76,9 +76,9 @@
         <div class="col p-4 d-flex flex-column position-static">
           <strong class="d-inline-block mb-2 text-success-emphasis"></strong>
           <h3 class="mb-0">Журнал</h3>
-          <div class="mb-1 text-body-secondary">Всего записей: 95</div>
+          <div class="mb-1 text-body-secondary">Всего записей: {% count_row_logs %}</div>
           <p class="mb-auto">Журнал рассылок</p>
-          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+          <a href="{% url 'Logs:list' %}" class="icon-link gap-1 icon-link-hover stretched-link">
             Страница "Журнал"
             <svg class="bi"><use xlink:href="#chevron-right"/></svg>
           </a>

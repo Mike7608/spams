@@ -1,7 +1,5 @@
 from django.db import models
-from django.urls import reverse
-
-from spammer.services import NULLABLE
+from spammer.settings import NULLABLE
 from users.models import User
 
 
