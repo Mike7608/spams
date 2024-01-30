@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{% url 'message:list' %}">Сообщения</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Рассылка</a>
+                        <a class="nav-link" href="{% url 'SetSending:list' %}">Рассылка</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Журнал</a>
@@ -26,7 +26,10 @@
                 </ul>
                 <form class="d-flex">
                     {% if user.is_authenticated %}
-                    <h6>{{ user.first_name }} {{ user.last_name }}<span class="badge bg-secondary">{{ user.email }}</span></h6>
+                    <div class="container">
+                         <div style="color: #ffffff">{{ user.first_name }} {{ user.last_name }}</div>
+                         <div style="color: #96cfed;">{{ user.email }}</div>
+                    </div>
                     <div class="container d-flex justify-content-end align-items-center">
                         <button type="button" class="btn btn-outline-secondary me-2"
                                 onclick="location.href='{% url 'users:logout' %}'">Выход

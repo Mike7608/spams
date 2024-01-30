@@ -23,4 +23,5 @@ urlpatterns = [
     path('users/', include('users.urls'), name='users'),
     path('clients/', include('clients.urls'), name='clients'),
     path('messages/', include('message.urls'), name='message'),
+    path('SetSending/', include('SetSending.urls'), name='SetSending'),
 ]

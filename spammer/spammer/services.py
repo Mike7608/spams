@@ -1,3 +1,4 @@
+from enum import Enum
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -11,3 +12,14 @@ class StyleFormMixin:
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 
+
+class Status(Enum):
+    """
+    Статусы рассылки: завершена, создана, запущена.
+    """
+    # создана
+    CREATED = 1
+    # запущена
+    LAUNCHED = 2
+    # завершена
+    COMPLETED = 3

@@ -11,13 +11,13 @@
                         <svg class="bd-placeholder-img" width="50" height="60" role="img"
                              aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
                              focusable="false">
-                            <image href="{% static 'icon/email.png' %}" x="0" y="0" width="50" height="60"/>
+                            <image href="{% static 'icon/setting.png' %}" x="0" y="0" width="50" height="60"/>
                         </svg>
                     </div>
                 </div>
                 <div class="col-10">
                     <div>
-                        <h6 class="display-6 fst-italic">Сообщения для рассылки</h6>
+                        <h6 class="display-6 fst-italic">Рассылка</h6>
                     </div>
                 </div>
             </div>
@@ -30,21 +30,27 @@
                     <thead>
                     <tr>
                         <th class="col-1 text-secondary">Код</th>
-                        <th class="col-4 text-secondary">Тема письма</th>
-                        <th class="col-6 text-secondary">Содержание</th>
+                        <th class="col-2 text-secondary">Время начала рассылки</th>
+                        <th class="col-2 text-secondary">Время окончания рассылки</th>
+                        <th class="col-1 text-secondary">Интервал (сек.)</th>
+                        <th class="col-5 text-secondary">Письмо</th>
+                        <th class="col-1 text-secondary">Статус</th>
                         <th class="col-2 text-secondary">Действие</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for message in message_list %}
+                    {% for set in setsending_list %}
                     <tr>
-                        <th scope="row">{{ message.pk }}</th>
-                        <td > {{ message.subject }}</td>
-                        <td >{{ message.message|slice:150 }}</td>
+                        <th scope="row">{{ set.pk }}</th>
+                        <td > {{ set.time_start }}</td>
+                        <td >{{ set.time_end }}</td>
+                        <td >{{ set.interval }}</td>
+                        <td >{{ set.message }}</td>
+                        <td >{{ set.status }}</td>
                         <td>
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-warning"
-                                        onclick="location.href='{% url 'message:update' message.pk %}'">
+                                        onclick="location.href='{% url 'SetSending:update' set.pk %}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                          class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -53,7 +59,7 @@
                                     </svg>
                                 </button>
                                 <button type="button" class="btn btn-danger"
-                                        onclick="location.href='{% url 'message:delete' message.pk %}'">
+                                        onclick="location.href='{% url 'SetSending:delete' set.pk %}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                          class="bi bi-x-circle" viewBox="0 0 16 16">
                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
@@ -70,8 +76,8 @@
             </form>
         </div>
         <button type="submit" class="btn btn-block btn-primary"
-                onclick="location.href='{% url 'message:create' %}'">
-            Новое сообщение
+                onclick="location.href='{% url 'SetSending:create' %}'">
+            Новая рассылка
         </button>
 </main>
 
