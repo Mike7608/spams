@@ -5,10 +5,8 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
-from spammer.services import JobService
+from spammer.services import JobService, SPAM_LAUNCHED
 from SetSending.models import SetSending
-
-from spammer.services import LAUNCHED
 
 
 # Декоратор close_old_connections гарантирует, что соединения с базой данных, которые стали
@@ -34,7 +32,7 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler()
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
-        set_send = SetSending.objects.filter(status=LAUNCHED)
+        set_send = SetSending.objects.filter(status=SPAM_LAUNCHED)
         jobs = JobService()
 
         for item in set_send:

@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 import re
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -8,9 +7,7 @@ from django_apscheduler.jobstores import DjangoJobStore
 from Logs.models import Logs
 from SetSending.models import SetSending
 from message.models import Message
-from spammer.settings import EMAIL_HOST_USER
-
-LAUNCHED = os.getenv('SPAM_LAUNCHED')
+from spammer.settings import EMAIL_HOST_USER, SPAM_LAUNCHED
 
 
 class StyleFormMixin:
@@ -33,7 +30,7 @@ class JobService:
         log_row.save()
 
     def my_job(self):
-        set_send = SetSending.objects.filter(status=LAUNCHED)
+        set_send = SetSending.objects.filter(status=SPAM_LAUNCHED)
         for item in set_send:
             if item.time_start <= datetime.now() < item.time_end:
                 self.send_email(item.message, item)
