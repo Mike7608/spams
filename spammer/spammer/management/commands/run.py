@@ -1,5 +1,6 @@
+import os
+import re
 from datetime import datetime
-
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from django.core.management import BaseCommand
@@ -9,14 +10,25 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 from SetSending.models import SetSending
-from spammer import settings
-from spammer.services import Status
+from message.models import Message
+from django.core.mail import send_mail
+from spammer.settings import EMAIL_HOST_USER
 
 logger = logging.getLogger(__name__)
 
+LAUNCHED = os.getenv('SPAM_LAUNCHED')
+
+
+def send_email(email: Message, set_send: SetSending):
+    list_address = re.split(pattern=";|,|\n", string=set_send.list_address)
+    send_mail(email.subject, email.message, EMAIL_HOST_USER, list_address)
+
 
 def my_job():
-    print(f"HELLO!- {datetime.now()}")
+    set_send = SetSending.objects.filter(status=LAUNCHED)
+    for item in set_send:
+        if item.time_start <= datetime.now() < item.time_end:
+            send_email(item.message, item)
 
 
 # Декоратор close_old_connections гарантирует, что соединения с базой данных, которые стали
@@ -42,18 +54,14 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler()
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
-        set_send = SetSending.objects.all()
+        set_send = SetSending.objects.filter(status=LAUNCHED)
 
         for item in set_send:
-            # if item.status == Status.LAUNCHED:
-            print(f"start_date={item.time_start}, end_date={item.time_end}, interval(sec.)={item.interval}, "
-                  f"pk={item.pk}")
-
             scheduler.add_job(my_job, trigger=IntervalTrigger(seconds=item.interval, start_date=item.time_start,
                                                               end_date=item.time_end), id=f"my_job_{item.pk}",
                               replace_existing=True)
 
-            logger.info(f"Добавлено задание «my_job_{item.pk}».")
+            logger.info(f"Added job «my_job_{item.pk}».")
 
         scheduler.add_job(
             delete_old_job_executions,
@@ -64,14 +72,15 @@ class Command(BaseCommand):
             max_instances=1,
             replace_existing=True,
         )
+
         logger.info(
-            "Добавлено еженедельное задание: 'delete_old_job_executions'."
+            "Added weekly job: 'delete_old_job_executions'."
         )
 
         try:
-            logger.info("Запуск scheduler...")
+            logger.info("Starting scheduler...")
             scheduler.start()
         except KeyboardInterrupt:
-            logger.info("Остановка scheduler...")
+            logger.info("Stopping scheduler...")
             scheduler.shutdown()
-            logger.info("Scheduler успешно закрылся!")
+            logger.info("Scheduler shut down successfully!")
