@@ -183,3 +183,8 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 NULLABLE = {'null': True, 'blank': True}
+
+# Статусы рассылки
+SPAM_CREATED = 1
+SPAM_LAUNCHED = 2
+SPAM_COMPLETED = 3
