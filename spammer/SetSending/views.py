@@ -55,7 +55,7 @@ def edit_sending(request, pk):
     dat = SetSending.objects.get(id=pk)  # Получаем объект модели для редактирования
 
     if request.method == 'POST':
-        form = FormSending(request.POST) # Привязываем данные к форме
+        form = FormSending(request.POST, dat) # Привязываем данные к форме
         if form.is_valid():
             time_start = form.cleaned_data.get('time_start')
             time_end = form.cleaned_data.get('time_end')
@@ -66,12 +66,12 @@ def edit_sending(request, pk):
             form.save()  # Сохраняем изменения
             # Добавьте здесь код для редиректа или отображения страницы с подтверждением
     else:
-        form = FormSending()  # Отображаем форму с заполненными данными объекта модели
-        form.data = dat
+        form = FormSending(dat)  # Отображаем форму с заполненными данными объекта модели
 
     data = {'interval': dat.interval, 'time_start': dat.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
             'time_end': dat.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dat.status,
-            'message': dat.message, 'interval_list': INTERVALS, 'status_list': Status.rus_list
+            'message': dat.message, 'interval_list': INTERVALS, 'status_list': Status.rus_list,
+            'form': form
             }
     return render(request, 'SetSending/SetSending_form_new.html', data)
 
