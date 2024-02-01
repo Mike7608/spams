@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from SetSending.forms import SetSendingForm, FormSending
 from SetSending.models import SetSending
-from spammer.services import JobService
+from spammer.services import JobService, Status
+from spammer.settings import INTERVALS
 
 
 class SetSendingListView(ListView):
@@ -53,13 +54,25 @@ def edit_sending(request, pk):
 
     dat = SetSending.objects.get(id=pk)  # Получаем объект модели для редактирования
 
-    form = FormSending  # Отображаем форму с заполненными данными объекта модели
-    form.data = dat
+    if request.method == 'POST':
+        form = FormSending(request.POST) # Привязываем данные к форме
+        if form.is_valid():
+            time_start = form.cleaned_data.get('time_start')
+            time_end = form.cleaned_data.get('time_end')
+            status = form.cleaned_data.get('status')
+            message = form.cleaned_data.get('message')
+            interval = form.cleaned_data.get('interval_list')
+            list_address = form.cleaned_data.get("list_address")
+            form.save()  # Сохраняем изменения
+            # Добавьте здесь код для редиректа или отображения страницы с подтверждением
+    else:
+        form = FormSending()  # Отображаем форму с заполненными данными объекта модели
+        form.data = dat
 
     data = {'interval': dat.interval, 'time_start': dat.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
             'time_end': dat.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dat.status,
-            'list_address': dat.list_address, 'message': dat.message}
-
+            'message': dat.message, 'interval_list': INTERVALS, 'status_list': Status.rus_list
+            }
     return render(request, 'SetSending/SetSending_form_new.html', data)
 
 

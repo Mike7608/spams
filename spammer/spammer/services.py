@@ -52,12 +52,4 @@ class Status:
     Created = 1
     Running = 2
 
-    @staticmethod
-    def rus_text(value:int):
-        list_status = {0: 'Завершен', 1: 'Создан', 2: 'Запущен'}
-        return list_status[value]
-
-
-class Interval:
-    INTERVALS = {86400: "Один раз в сутки", 604800: "Один раз в неделю", 2592000: "Один раз в месяц",
-                 1: "Другой период"}
+    rus_list = [{'value': 1, 'text': 'Создан'}, {'value': 2, 'text': 'Запущен'}, {'value': 0, 'text': 'Завершен'}]
