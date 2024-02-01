@@ -7,7 +7,7 @@ from django_apscheduler.jobstores import DjangoJobStore
 from Logs.models import Logs
 from SetSending.models import SetSending
 from message.models import Message
-from spammer.settings import EMAIL_HOST_USER, LIST_STATUS
+from spammer.settings import EMAIL_HOST_USER
 
 
 class StyleFormMixin:
@@ -30,7 +30,7 @@ class JobService:
         log_row.save()
 
     def my_job(self):
-        set_send = SetSending.objects.filter(status=LIST_STATUS[2])
+        set_send = SetSending.objects.filter(status=Status.Running)
         for item in set_send:
             if item.time_start <= datetime.now() < item.time_end:
                 self.send_email(item.message, item)
@@ -44,3 +44,20 @@ class JobService:
                           replace_existing=True)
 
 
+class Status:
+    """
+    Статусы рассылки
+    """
+    Completed = 0
+    Created = 1
+    Running = 2
+
+    @staticmethod
+    def rus_text(value:int):
+        list_status = {0: 'Завершен', 1: 'Создан', 2: 'Запущен'}
+        return list_status[value]
+
+
+class Interval:
+    INTERVALS = {86400: "Один раз в сутки", 604800: "Один раз в неделю", 2592000: "Один раз в месяц",
+                 1: "Другой период"}

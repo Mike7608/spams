@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
-from spammer.services import JobService, SPAM_LAUNCHED
+from spammer.services import JobService, Status
 from SetSending.models import SetSending
 
 
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler()
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
-        set_send = SetSending.objects.filter(status=SPAM_LAUNCHED)
+        set_send = SetSending.objects.filter(status=Status.Running)
         jobs = JobService()
 
         for item in set_send:
