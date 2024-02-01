@@ -68,23 +68,23 @@ def add_sending(request):
 
 
 def edit_sending(request, pk):
-    dat = SetSending.objects.get(id=pk)
+    dataset = SetSending.objects.get(id=pk)
     list_message = Message.objects.filter(user=request.user.pk)
 
     if request.method == 'POST':
-        dat.time_start = request.POST.get('time_start')
-        dat.time_end = request.POST.get('time_end')
-        dat.status = request.POST.get('status_list')
-        # dat.message = request.POST.get('message')
-        dat.interval = request.POST.get('interval_list')
-        dat.list_address = request.POST.get("list_address")
-        dat.save()
+        dataset.time_start = request.POST.get('time_start')
+        dataset.time_end = request.POST.get('time_end')
+        dataset.status = request.POST.get('status_list')
+        dataset.message_id = request.POST.get('list_message')
+        dataset.interval = request.POST.get('interval_list')
+        dataset.list_address = request.POST.get("list_address")
+        dataset.save()
         return redirect(reverse('SetSending:list'))
 
-    data = {'interval': dat.interval, 'time_start': dat.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
-            'time_end': dat.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dat.status,
+    data = {'interval': dataset.interval, 'time_start': dataset.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
+            'time_end': dataset.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dataset.status,
             'list_message': list_message, 'interval_list': INTERVALS, 'status_list': Status.rus_list,
-            'list_address': dat.list_address
+            'list_address': dataset.list_address, 'id_message': dataset.message_id
             }
     return render(request, 'SetSending/SetSending_form_new.html', data)
 

@@ -43,7 +43,11 @@
                             <div class="row">
                                     <select class="col-7" name="interval_list">
                                         {% for item in interval_list %}
+                                        {% if item.value == interval %}
+                                        <option value="{{ item.value }}" selected>{{ item.text }}</option>
+                                        {% else %}
                                         <option value="{{ item.value }}">{{ item.text }}</option>
+                                        {% endif%}
                                         {% endfor %}
                                     </select>
                             </div>
@@ -53,9 +57,13 @@
                         <div style="width: 870px;">
                             <label class="col-2" >Статус:</label>
                                 <select class="col-7" name="status_list">
-                                        {% for item in status_list %}
-                                        <option value="{{ item.value }}">{{ item.text }}</option>
-                                        {% endfor %}
+                                    {% for item in status_list %}
+                                    {% if item.value == status %}
+                                    <option value="{{ item.value }}" selected>{{ item.text }}</option>
+                                    {% else %}
+                                    <option value="{{ item.value }}">{{ item.text }}</option>
+                                    {% endif%}
+                                    {% endfor %}
                                 </select>
                         </div>
                     </div>
@@ -71,7 +79,11 @@
                             <label class="col-2" >Сообщение:</label>
                                     <select class="col-7" name="list_message">
                                         {% for item in list_message %}
+                                        {% if item.id == id_message %}
+                                        <option value="{{ item.pk }}" selected>{{ item.subject }} - {{ item.message }}</option>
+                                        {% else %}
                                         <option value="{{ item.pk }}">{{ item.subject }} - {{ item.message }}</option>
+                                        {% endif%}
                                         {% endfor %}
                                     </select>
                             </div>
