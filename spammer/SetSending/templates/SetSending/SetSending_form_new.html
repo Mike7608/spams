@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'message.html' %}
+{% load static %}
+<main class="form-signin">
+    <div class="p-4 p-md-3 mb-4 rounded text-body-emphasis bg-body-secondary">
+        <div class="container">
+            <div class="row">
+                <div class="col-1">
+                    <div class="d-none d-lg-block">
+                        <svg class="bd-placeholder-img" width="50" height="60" role="img"
+                             aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                             focusable="false">
+                            <image href="{% static 'icon/setting.png' %}" x="0" y="0" width="50" height="60"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div>
+                        <h6 class="display-6 fst-italic">Ввод / редактирование рассылки сообщения</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="container" style="height: 450px">
+                    <div class="row" style="height: 100px" >
+                        <div style="width: 280px;">
+                            <label for="id_time_start">Начальная дата и время:</label>
+                            <input type="datetime-local" id="id_time_start" value="{{ time_start }}">
+                        </div>
+                        <div style="width: 280px;">
+                            <label for="time_end">Конечная дата и время:</label>
+                            <input type="datetime-local" id="time_end" value="{{ time_end }}">
+                        </div>
+                        <div style="width: 400px;" >
+                            <div class="row">
+                                <label for="id_interval">Интервал (в сек.): </label>
+                            </div>
+                            <div class="row">
+                                <input class="col-4" type="number" min="60" id="id_interval" name="interval" value="{{ interval }}">
+                                    <select class="col-7" id="id_intervals" name="intervals">
+                                      <option value="volvo">Volvo</option>
+                                      <option value="saab">Saab</option>
+                                      <option value="fiat">Fiat</option>
+                                      <option value="audi">Audi</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 50px" >
+                        <div style="width: 870px;">
+                            <label class="col-2" for="id_status">Статус:</label>
+                                <select class="col-7" name="status" id="id_status" >
+                                  <option value="volvo">Volvo</option>
+                                  <option value="saab">Saab</option>
+                                  <option value="fiat">Fiat</option>
+                                  <option value="audi">Audi</option>
+                                </select>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 200px" >
+                        <div class="col-10" style="height: 220px;">
+                            <p></p>
+                            <label class="col-2" for="id_list_address">Список адресов:</label>
+                            <textarea class="col-5" id="id_list_address" name="list_address" style="height: 180px;">{{ list_address }}</textarea>
+                         </div>
+                        <div class="col-10">
+                            <p></p>
+                            <label class="col-2" for="message">Сообщение:</label>
+                            <input class="col-9" type="text" id="message" value="{{ message }}">
+                        </div>
+                        <p></p>
+                    </div>
+                </div>
+
+            <button type="submit" class="btn btn-block btn-success">
+                Создать / Сохранить
+            </button>
+        </form>
+    </div>
+
+</main>
+
+{% endblock %}
