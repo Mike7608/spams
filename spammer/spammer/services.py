@@ -7,7 +7,7 @@ from django_apscheduler.jobstores import DjangoJobStore
 from Logs.models import Logs
 from SetSending.models import SetSending
 from message.models import Message
-from spammer.settings import EMAIL_HOST_USER, SPAM_LAUNCHED
+from spammer.settings import EMAIL_HOST_USER, LIST_STATUS
 
 
 class StyleFormMixin:
@@ -30,7 +30,7 @@ class JobService:
         log_row.save()
 
     def my_job(self):
-        set_send = SetSending.objects.filter(status=SPAM_LAUNCHED)
+        set_send = SetSending.objects.filter(status=LIST_STATUS[2])
         for item in set_send:
             if item.time_start <= datetime.now() < item.time_end:
                 self.send_email(item.message, item)

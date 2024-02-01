@@ -125,7 +125,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -185,6 +185,6 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 NULLABLE = {'null': True, 'blank': True}
 
 # Статусы рассылки
-SPAM_CREATED = 1
-SPAM_LAUNCHED = 2
-SPAM_COMPLETED = 3
+
+STATUS = {1: 'Создан', 2: 'Запущен', 3: 'Завершен'}
+INTERVALS = {86400: "Один раз в сутки", 604800: "Один раз в неделю", 2592000: "Один раз в месяц", 1: "Другой период"}
