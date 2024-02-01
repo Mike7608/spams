@@ -24,24 +24,24 @@
         </div>
     </div>
     <div>
-        <form method="post" enctype="multipart/form-data" novalidate>
+        <form method="post" enctype="multipart/form-data" >
             {% csrf_token %}
                 <div class="container" style="height: 450px">
                     <div class="row" style="height: 100px" >
                         <div style="width: 280px;">
-                            <label for="id_time_start">Начальная дата и время:</label>
-                            <input type="datetime-local" id="id_time_start" value="{{ time_start }}">
+                            <label >Начальная дата и время:</label>
+                            <input type="datetime-local" name="time_start" value="{{ time_start }}">
                         </div>
                         <div style="width: 280px;">
-                            <label for="time_end">Конечная дата и время:</label>
-                            <input type="datetime-local" id="time_end" value="{{ time_end }}">
+                            <label >Конечная дата и время:</label>
+                            <input type="datetime-local" name="time_end" value="{{ time_end }}">
                         </div>
                         <div style="width: 400px;" >
                             <div class="row">
-                                <label for="id_interval_list">Интервал: </label>
+                                <label>Интервал: </label>
                             </div>
                             <div class="row">
-                                    <select class="col-7" id="id_interval_list" name="interval_list">
+                                    <select class="col-7" name="interval_list">
                                         {% for item in interval_list %}
                                         <option value="{{ item.value }}">{{ item.text }}</option>
                                         {% endfor %}
@@ -51,10 +51,10 @@
                     </div>
                     <div class="row" style="height: 50px" >
                         <div style="width: 870px;">
-                            <label class="col-2" for="id_status_list">Статус:</label>
-                                <select class="col-7" name="status" id="id_status_list" >
-                                        {% for item_status in status_list %}
-                                        <option value="{{ item_status.value }}">{{ item_status.text }}</option>
+                            <label class="col-2" >Статус:</label>
+                                <select class="col-7" name="status_list">
+                                        {% for item in status_list %}
+                                        <option value="{{ item.value }}">{{ item.text }}</option>
                                         {% endfor %}
                                 </select>
                         </div>
@@ -63,12 +63,12 @@
                         <div class="col-10" style="height: 220px;">
                             <p></p>
                             <label class="col-2" >Список адресов:</label>
-                            <textarea class="col-5" id="id_list_address" style="height: 180px;">{{ list_address }}</textarea>
+                            <textarea class="col-5" style="height: 180px;" name="list_address">{{ list_address }}</textarea>
                          </div>
                         <div class="col-10">
                             <p></p>
-                            <label class="col-2" for="message">Сообщение:</label>
-                            <input class="col-9" type="text" id="message" value="{{ message }}">
+                            <label class="col-2" >Сообщение:</label>
+                            <input class="col-9" type="text" name="message" value="{{ message }}">
                         </div>
                         <p></p>
                     </div>

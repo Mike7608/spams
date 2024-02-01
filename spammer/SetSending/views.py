@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from SetSending.forms import SetSendingForm, FormSending
 from SetSending.models import SetSending
@@ -50,28 +50,39 @@ def add_sending(request):
     return render(request, 'SetSending/SetSending_form_new.html', data)
 
 
-def edit_sending(request, pk):
+# def edit_sending(request, pk):
+#     dat = SetSending.objects.get(id=pk)
+#
+#     if request.method == 'POST':
+#         form = FormSending(request.post)
+#         form.data = dat
+#         if form.is_valid():
+#             form.save()
+#     else:
+#         form = FormSending()
+#         form.data = dat
+#
+#     data = {'form': form}
+#     return render(request, 'SetSending/SetSending_form_new.html', data)
 
-    dat = SetSending.objects.get(id=pk)  # Получаем объект модели для редактирования
+
+def edit_sending(request, pk):
+    dat = SetSending.objects.get(id=pk)
 
     if request.method == 'POST':
-        form = FormSending(request.POST, dat) # Привязываем данные к форме
-        if form.is_valid():
-            time_start = form.cleaned_data.get('time_start')
-            time_end = form.cleaned_data.get('time_end')
-            status = form.cleaned_data.get('status')
-            message = form.cleaned_data.get('message')
-            interval = form.cleaned_data.get('interval_list')
-            list_address = form.cleaned_data.get("list_address")
-            form.save()  # Сохраняем изменения
-            # Добавьте здесь код для редиректа или отображения страницы с подтверждением
-    else:
-        form = FormSending(dat)  # Отображаем форму с заполненными данными объекта модели
+        dat.time_start = request.POST.get('time_start')
+        dat.time_end = request.POST.get('time_end')
+        dat.status = request.POST.get('status_list')
+        # dat.message = request.POST.get('message')
+        dat.interval = request.POST.get('interval_list')
+        dat.list_address = request.POST.get("list_address")
+        dat.save()
+        return redirect(reverse('SetSending:list'))
 
     data = {'interval': dat.interval, 'time_start': dat.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
             'time_end': dat.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dat.status,
             'message': dat.message, 'interval_list': INTERVALS, 'status_list': Status.rus_list,
-            'form': form
+            'list_address': dat.list_address
             }
     return render(request, 'SetSending/SetSending_form_new.html', data)
 
