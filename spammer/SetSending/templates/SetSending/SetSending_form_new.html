@@ -67,8 +67,14 @@
                          </div>
                         <div class="col-10">
                             <p></p>
+                            <div class="row">
                             <label class="col-2" >Сообщение:</label>
-                            <input class="col-9" type="text" name="message" value="{{ message }}">
+                                    <select class="col-7" name="list_message">
+                                        {% for item in list_message %}
+                                        <option value="{{ item.pk }}">{{ item.subject }} - {{ item.message }}</option>
+                                        {% endfor %}
+                                    </select>
+                            </div>
                         </div>
                         <p></p>
                     </div>

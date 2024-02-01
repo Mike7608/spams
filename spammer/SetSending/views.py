@@ -3,6 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from SetSending.forms import SetSendingForm, FormSending
 from SetSending.models import SetSending
+from message.models import Message
 from spammer.services import JobService, Status
 from spammer.settings import INTERVALS
 
@@ -68,6 +69,7 @@ def add_sending(request):
 
 def edit_sending(request, pk):
     dat = SetSending.objects.get(id=pk)
+    list_message = Message.objects.filter(user=request.user.pk)
 
     if request.method == 'POST':
         dat.time_start = request.POST.get('time_start')
@@ -81,7 +83,7 @@ def edit_sending(request, pk):
 
     data = {'interval': dat.interval, 'time_start': dat.time_start.strftime("%Y-%m-%dT%H:%M:%S"),
             'time_end': dat.time_end.strftime("%Y-%m-%dT%H:%M:%S"), 'status': dat.status,
-            'message': dat.message, 'interval_list': INTERVALS, 'status_list': Status.rus_list,
+            'list_message': list_message, 'interval_list': INTERVALS, 'status_list': Status.rus_list,
             'list_address': dat.list_address
             }
     return render(request, 'SetSending/SetSending_form_new.html', data)
