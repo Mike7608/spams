@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-{% include 'message.html' %}
 {% load static %}
 <main class="form-signin">
     <div class="p-4 p-md-3 mb-4 rounded text-body-emphasis bg-body-secondary">
@@ -24,80 +23,144 @@
         </div>
     </div>
     <div>
-        <form method="post" enctype="multipart/form-data" >
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-                <div class="container" style="height: 450px">
-                    <div class="row" style="height: 100px" >
-                        <div style="width: 280px;">
-                            <label >Начальная дата и время:</label>
-                            <input type="datetime-local" name="time_start" value="{{ time_start }}">
-                        </div>
-                        <div style="width: 280px;">
-                            <label >Конечная дата и время:</label>
-                            <input type="datetime-local" name="time_end" value="{{ time_end }}">
-                        </div>
-                        <div style="width: 400px;" >
-                            <div class="row">
-                                <label>Интервал: </label>
-                            </div>
-                            <div class="row">
-                                    <select class="col-7" name="interval_list">
-                                        {% for item in interval_list %}
-                                        {% if item.value == interval %}
-                                        <option value="{{ item.value }}" selected>{{ item.text }}</option>
-                                        {% else %}
-                                        <option value="{{ item.value }}">{{ item.text }}</option>
-                                        {% endif%}
-                                        {% endfor %}
-                                    </select>
-                            </div>
-                        </div>
+            <div class="container" style="height: 450px">
+                <div class="row" style="height: 100px">
+                    <div style="width: 280px;">
+                        <label>Начальная дата и время:</label>
+                        <input type="datetime-local" name="time_start" value="{{ time_start }}">
                     </div>
-                    <div class="row" style="height: 50px" >
-                        <div style="width: 870px;">
-                            <label class="col-2" >Статус:</label>
-                                <select class="col-7" name="status_list">
-                                    {% for item in status_list %}
-                                    {% if item.value == status %}
-                                    <option value="{{ item.value }}" selected>{{ item.text }}</option>
-                                    {% else %}
-                                    <option value="{{ item.value }}">{{ item.text }}</option>
-                                    {% endif%}
-                                    {% endfor %}
-                                </select>
-                        </div>
+                    <div style="width: 280px;">
+                        <label>Конечная дата и время:</label>
+                        <input type="datetime-local" name="time_end" value="{{ time_end }}">
                     </div>
-                    <div class="row" style="height: 200px" >
-                        <div class="col-10" style="height: 220px;">
-                            <p></p>
-                            <label class="col-2" >Список адресов:</label>
-                            <textarea class="col-5" style="height: 180px;" name="list_address">{{ list_address }}</textarea>
-                         </div>
-                        <div class="col-10">
-                            <p></p>
-                            <div class="row">
-                            <label class="col-2" >Сообщение:</label>
-                                    <select class="col-7" name="list_message">
-                                        {% for item in list_message %}
-                                        {% if item.id == id_message %}
-                                        <option value="{{ item.pk }}" selected>{{ item.subject }} - {{ item.message }}</option>
-                                        {% else %}
-                                        <option value="{{ item.pk }}">{{ item.subject }} - {{ item.message }}</option>
-                                        {% endif%}
-                                        {% endfor %}
-                                    </select>
-                            </div>
+                    <div style="width: 400px;">
+                        <div class="row">
+                            <label>Интервал: </label>
                         </div>
-                        <p></p>
+                        <div class="row">
+                            <select class="col-7" name="interval_list">
+                                {% for item in interval_list %}
+                                {% if item.value == interval %}
+                                <option value="{{ item.value }}" selected>{{ item.text }}</option>
+                                {% else %}
+                                <option value="{{ item.value }}">{{ item.text }}</option>
+                                {% endif%}
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
+                <div class="row" style="height: 50px">
+                    <div style="width: 870px;">
+                        <label class="col-2">Статус:</label>
+                        <select class="col-7" name="status_list">
+                            {% for item in status_list %}
+                            {% if item.value == status %}
+                            <option value="{{ item.value }}" selected>{{ item.text }}</option>
+                            {% else %}
+                            <option value="{{ item.value }}">{{ item.text }}</option>
+                            {% endif%}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="height: 200px">
+                    <div class="col-10" style="height: 220px;">
+                        <div class="row">
+                            <label class="col-2">Список адресов:</label>
+                            <textarea class="col-5" style="height: 180px;" id="list_address"
+                                      name="list_address">{{ list_address }}</textarea>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                                        data-bs-target="#ClientModal">
+                                    Клиенты
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <p></p>
+                        <div class="row">
+                            <label class="col-2">Сообщение:</label>
+                            <select class="col-7" name="list_message">
+                                {% for item in list_message %}
+                                {% if item.id == id_message %}
+                                <option value="{{ item.pk }}" selected>{{ item.subject }} - {{ item.message }}</option>
+                                {% else %}
+                                <option value="{{ item.pk }}">{{ item.subject }} - {{ item.message }}</option>
+                                {% endif%}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <p></p>
+                </div>
+            </div>
 
             <button type="submit" class="btn btn-block btn-success" href="">
                 Создать / Сохранить
             </button>
         </form>
     </div>
+    <!-- Модальное окно -->
+    <div class="modal fade" id="ClientModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Выбор клиента</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-1 text-secondary">Код</th>
+                                <th class="col-4 text-secondary">Наименование</th>
+                                <th class="col-3 text-secondary">Электронный адрес</th>
+                                <th class="col-1 text-secondary">Действие</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for client in client_list %}
+                            <tr>
+                                <th scope="row">{{ client.pk }}</th>
+                                <td> {{ client.name }}</td>
+                                <td style="color: #96cfed;">{{ client.email }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary bt-sm" id="select-{{client.pk}}"
+                                            name="select-{{client.pk}}"  onclick="add_address('{{client.email}}')">
+                                        Выбрать
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
 
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Закрыть
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
 </main>
-
+<script>
+  function add_address(text) {
+    var oldValue = document.getElementById('list_address').value;
+    newValue = oldValue + ';\n'+ text
+    document.getElementById('list_address').value = newValue;
+  }
+</script>
 {% endblock %}

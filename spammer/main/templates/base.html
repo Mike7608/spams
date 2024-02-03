@@ -1,6 +1,7 @@
 {% load static %}
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
+
 <head>
     <script src="{% static 'js/color-modes.js' %}"></script>
 
@@ -177,6 +178,7 @@
 {% include 'menu.html' %}
 
 <main class="container py-5">
+    {% include 'message.html' %}
     {% block content %}
     {% endblock %}
 </main>
@@ -189,7 +191,9 @@
         <a href="#">В начало</a>
     </p>
 </footer>
+
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
+
 </html>

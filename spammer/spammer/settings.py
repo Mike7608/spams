@@ -185,5 +185,6 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 NULLABLE = {'null': True, 'blank': True}
 
 # интервалы рассылки
+
 INTERVALS = [{"value": 86400, 'text': "Один раз в сутки"}, {"value": 604800, 'text': "Один раз в неделю"},
              {"value": 2592000, 'text': "Один раз в месяц"}]
