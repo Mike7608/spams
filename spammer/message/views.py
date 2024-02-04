@@ -47,3 +47,4 @@ class MessageDeleteView(LoginRequiredMixin,  SuccessMessageMixin, DeleteView):
     model = Message
     success_url = reverse_lazy('message:list')
     success_message = 'Сообщение успешно удалено!'
+
