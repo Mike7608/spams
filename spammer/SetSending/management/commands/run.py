@@ -32,16 +32,6 @@ class Command(BaseCommand):
         scheduler = BlockingScheduler()
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
-        set_send = SetSending.objects.filter(status=Status.Running)
-        jobs = JobService()
-
-        for item in set_send:
-            scheduler.add_job(jobs.my_job, trigger=IntervalTrigger(seconds=item.interval,
-                                                                   start_date=item.time_start,
-                                                                   end_date=item.time_end),
-                              id=f"my_job_{item.pk}",
-                              replace_existing=True)
-
         scheduler.add_job(
             delete_old_job_executions,
             trigger=CronTrigger(

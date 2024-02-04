@@ -43,6 +43,7 @@
                         <td style="color: #96cfed;">{{ client.email }}</td>
                         <td >{{ client.comment|slice:45 }}</td>
                         <td>
+                            {% if perms.client.change_client %}
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-warning"
                                         onclick="location.href='{% url 'clients:update' client.pk %}'">
@@ -62,6 +63,7 @@
                                     </svg>
                                 </button>
                             </div>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -70,10 +72,12 @@
                 </table>
             </form>
         </div>
+        {% if perms.client.add_client %}
         <button type="submit" class="btn btn-block btn-primary"
                 onclick="location.href='{% url 'clients:create' %}'">
             Добавить клиента
         </button>
+        {% endif %}
 </main>
 
 {% endblock %}

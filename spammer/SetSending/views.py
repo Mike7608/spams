@@ -1,3 +1,6 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from spammer.services import DateTimeNow
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -7,52 +10,32 @@ from clients.models import Client
 from message.models import Message
 from spammer.services import JobService, Status
 from spammer.settings import INTERVALS
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
-class SetSendingListView(ListView):
+class SetSendingListView(LoginRequiredMixin, ListView):
     model = SetSending
     ordering = ['pk']
 
 
-# class SetSendingCreateView(CreateView):
-#     model = SetSending
-#     form_class = SetSendingForm
-#     success_url = reverse_lazy('SetSending:list')
-#
-#     def form_valid(self, form):
-#         new_setting = form.save(commit=False)
-#         new_setting.user = self.request.user
-#         new_setting.save()
-#         jobs = JobService()
-#         jobs.add_job(new_setting.time_start, new_setting.time_end, new_setting.interval, new_setting.pk)
-#         return super().form_valid(form)
-
-
-# class SetSendingUpdateView(UpdateView):
-#     model = SetSending
-#     form_class = SetSendingForm
-#     success_url = reverse_lazy('SetSending:list')
-#
-#     def form_valid(self, form):
-#         new_message = form.save(commit=False)
-#         new_message.save()
-#         return super().form_valid(form)
-
-
-class SetSendingDeleteView(DeleteView):
+class SetSendingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = SetSending
     success_url = reverse_lazy('SetSending:list')
+    permission_required = 'SetSending.delete_SetSending'
 
 
+@login_required
+@permission_required('SetSending.add_SetSending')
 def add_sending(request):
     """
     Процедура ввода новой рассылки
     :param request:
     """
     dataset = SetSending()
-    dataset.time_start = datetime.now()
-    dataset.time_end = datetime.now()
+
+    dataset.time_start = DateTimeNow.current_datetime()
+    dataset.time_end = DateTimeNow.current_datetime()
+    dataset.time_end = dataset.time_end + timedelta(days=1)
 
     client_list = Client.objects.filter(user=request.user.pk)
     list_message = Message.objects.filter(user=request.user.pk)
@@ -66,14 +49,15 @@ def add_sending(request):
         if time_delta >= float(dataset.interval):
             dataset.save()
 
-            jobs = JobService()
-            jobs.add_job(dataset.time_start, dataset.time_end, dataset.interval, dataset.pk)
+            if dataset.status == Status.Running:
+                jobs = JobService()
+                jobs.add_job(request, dataset)
 
-            messages.add_message(request, messages.SUCCESS, 'Данные успешно сохранены!')
+            messages.add_message(request, messages.SUCCESS, f'Данные #{dataset.pk} успешно сохранены!')
 
             return redirect(reverse('SetSending:list'))
         else:
-            messages.add_message(request, messages.ERROR, 'Ошибочное значение периода!')
+            messages.add_message(request, messages.ERROR, 'Задание имеет неверное значение периода!')
 
     data = {'interval': dataset.interval,
             'status': dataset.status,
@@ -87,13 +71,17 @@ def add_sending(request):
     return render(request, 'SetSending/SetSending_form_new.html', data)
 
 
+@login_required
+@permission_required('SetSending.change_SetSending')
 def edit_sending(request, pk):
     """
     Процедура обновления данных рассылки
     :param request:
     :param pk: ключ записи
     """
+
     dataset = SetSending.objects.get(id=pk)
+
     client_list = Client.objects.filter(user=request.user.pk)
 
     list_message = Message.objects.filter(user=request.user.pk)
@@ -106,10 +94,15 @@ def edit_sending(request, pk):
 
         if time_delta >= float(dataset.interval):
             dataset.save()
-            messages.add_message(request, messages.SUCCESS, 'Данные успешно сохранены!')
+
+            jobs = JobService()
+            if dataset.status == Status.Running:
+                jobs.add_job(request, dataset)
+
+            messages.add_message(request, messages.SUCCESS, f'Данные #{dataset.pk} успешно сохранены!')
             return redirect(reverse('SetSending:list'))
         else:
-            messages.add_message(request, messages.ERROR, 'Ошибочное значение периода!')
+            messages.add_message(request, messages.ERROR, f'Задание имеет неверное значение периода!')
 
     data = {'interval': int(dataset.interval),
             'time_start': dataset.time_start.strftime("%Y-%m-%dT%H:%M"),

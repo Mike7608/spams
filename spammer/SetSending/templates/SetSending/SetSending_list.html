@@ -32,7 +32,7 @@
                         <th class="col-1 text-secondary">Код</th>
                         <th class="col-2 text-secondary">Время начала рассылки</th>
                         <th class="col-2 text-secondary">Время окончания рассылки</th>
-                        <th class="col-1 text-secondary">Интервал (сек.)</th>
+                        <th class="col-1 text-secondary">Интервал</th>
                         <th class="col-2 text-secondary">Список получателей</th>
                         <th class="col-5 text-secondary">Письмо</th>
                         <th class="col-1 text-secondary">Статус</th>
@@ -41,15 +41,16 @@
                     </thead>
                     <tbody>
                     {% for sets in setsending_list %}
-                    <tr>
+                    <tr >
                         <th scope="row">{{ sets.pk }}</th>
-                        <td > {{ sets.time_start }}</td>
-                        <td >{{ sets.time_end }}</td>
-                        <td >{{ sets.interval|interval_text }}</td>
+                        <td > {{ sets.pk|date_start }}</td>
+                        <td >{{ sets.pk|date_end }}</td>
+                        <td >{{ sets.pk|interval_text }}</td>
                         <td style="color: #96cfed;">{{ sets.list_address }}</td>
                         <td >{{ sets.message }}</td>
-                        <td >{{ sets.status|status_text }}</td>
+                        <td class="{{ sets.pk|color_status }}">{{ sets.pk|status_text }}</td>
                         <td>
+                            {% if perms.SetSending.change_SetSending %}
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-warning"
                                         onclick="location.href='{% url 'SetSending:update' sets.pk %}'">
@@ -69,6 +70,7 @@
                                     </svg>
                                 </button>
                             </div>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -77,10 +79,12 @@
                 </table>
             </form>
         </div>
+        {% if perms.SetSending.add_SetSending %}
         <button type="submit" class="btn btn-block btn-primary"
                 onclick="location.href='{% url 'SetSending:create' %}'">
             Новая рассылка
         </button>
+        {% endif %}
 </main>
 
 {% endblock %}

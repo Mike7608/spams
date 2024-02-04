@@ -41,6 +41,7 @@
                         <td > {{ message.subject }}</td>
                         <td >{{ message.message|slice:150 }}</td>
                         <td>
+                            {% if perms.message.change_message %}
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-warning"
                                         onclick="location.href='{% url 'message:update' message.pk %}'">
@@ -60,6 +61,7 @@
                                     </svg>
                                 </button>
                             </div>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -68,10 +70,12 @@
                 </table>
             </form>
         </div>
+        {% if perms.message.add_message %}
         <button type="submit" class="btn btn-block btn-primary"
                 onclick="location.href='{% url 'message:create' %}'">
             Новое сообщение
         </button>
+        {% endif %}
 </main>
 
 {% endblock %}

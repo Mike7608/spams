@@ -159,7 +159,11 @@
 <script>
   function add_address(text) {
     var oldValue = document.getElementById('list_address').value;
-    newValue = oldValue + ';\n'+ text
+    if (text) {
+        newValue = oldValue + text + ';\n'
+    } else {
+        newValue = text + ';\n'
+    }
     document.getElementById('list_address').value = newValue;
   }
 </script>
