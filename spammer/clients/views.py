@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -11,12 +11,17 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     ordering = ['pk']
 
+    def get_queryset(self):
+        # Фильтрация данных модели
+        queryset = super().get_queryset()
+        filtered_data = queryset.filter(user_id=self.request.user.pk)
+        return filtered_data
 
-class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+
+class ClientCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('clients:list')
-    permission_required = 'client.add_client'
     success_message = "Данные нового клиента успешно сохранены!"
 
     def form_valid(self, form):
@@ -26,11 +31,10 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
         return super().form_valid(form)
 
 
-class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('clients:list')
-    permission_required = 'client.change_client'
     success_message = "Данные клиента успешно обновлены!"
 
     def form_valid(self, form):
@@ -39,9 +43,8 @@ class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
         return super().form_valid(form)
 
 
-class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+class ClientDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('clients:list')
-    permission_required = 'client.delete_client'
     success_message = "Клиент был успешно удален!"
 

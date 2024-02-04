@@ -43,8 +43,9 @@
                         <td style="color: #96cfed;">{{ client.email }}</td>
                         <td >{{ client.comment|slice:45 }}</td>
                         <td>
-                            {% if perms.client.change_client %}
+
                             <div class="btn-group btn-group-sm" role="group">
+                                {% if perms.clients.change_client %}
                                 <button type="button" class="btn btn-warning"
                                         onclick="location.href='{% url 'clients:update' client.pk %}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -54,6 +55,8 @@
                                               d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                     </svg>
                                 </button>
+                                {% endif %}
+                                {% if perms.clients.delete_client %}
                                 <button type="button" class="btn btn-danger"
                                         onclick="location.href='{% url 'clients:delete' client.pk %}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -62,8 +65,9 @@
                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
                                     </svg>
                                 </button>
+                                {% endif %}
                             </div>
-                            {% endif %}
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -72,7 +76,7 @@
                 </table>
             </form>
         </div>
-        {% if perms.client.add_client %}
+        {% if perms.clients.add_client %}
         <button type="submit" class="btn btn-block btn-primary"
                 onclick="location.href='{% url 'clients:create' %}'">
             Добавить клиента

@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -11,12 +11,17 @@ class MessageListView(LoginRequiredMixin, ListView):
     model = Message
     ordering = ['pk']
 
+    def get_queryset(self):
+        # Фильтрация данных модели
+        queryset = super().get_queryset()
+        filtered_data = queryset.filter(user_id=self.request.user.pk)
+        return filtered_data
 
-class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView):
+
+class MessageCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('message:list')
-    permission_required = 'Message.add_Message'
     success_message = 'Новое письмо для рассылки успешно сохранено!'
 
     def form_valid(self, form):
@@ -26,11 +31,10 @@ class MessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
         return super().form_valid(form)
 
 
-class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
+class MessageUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('message:list')
-    permission_required = 'Message.change_Message'
     success_message = 'Изменения сообщения успешно сохранены!'
 
     def form_valid(self, form):
@@ -39,8 +43,7 @@ class MessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMess
         return super().form_valid(form)
 
 
-class MessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+class MessageDeleteView(LoginRequiredMixin,  SuccessMessageMixin, DeleteView):
     model = Message
     success_url = reverse_lazy('message:list')
-    permission_required = 'Message.delete_Message'
     success_message = 'Сообщение успешно удалено!'

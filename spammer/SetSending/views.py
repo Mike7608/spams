@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from spammer.services import DateTimeNow
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -17,15 +17,19 @@ class SetSendingListView(LoginRequiredMixin, ListView):
     model = SetSending
     ordering = ['pk']
 
+    def get_queryset(self):
+        # Фильтрация данных модели
+        queryset = super().get_queryset()
+        filtered_data = queryset.filter(user_id=self.request.user.pk)
+        return filtered_data
 
-class SetSendingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+
+class SetSendingDeleteView(LoginRequiredMixin,  DeleteView):
     model = SetSending
     success_url = reverse_lazy('SetSending:list')
-    permission_required = 'SetSending.delete_SetSending'
 
 
 @login_required
-@permission_required('SetSending.add_SetSending')
 def add_sending(request):
     """
     Процедура ввода новой рассылки
@@ -72,7 +76,6 @@ def add_sending(request):
 
 
 @login_required
-@permission_required('SetSending.change_SetSending')
 def edit_sending(request, pk):
     """
     Процедура обновления данных рассылки
