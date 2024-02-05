@@ -50,7 +50,7 @@
                         <td >{{ sets.message }}</td>
                         <td class="{{ sets.pk|color_status }}">{{ sets.pk|status_text }}</td>
                         <td>
-                            {% if perms.SetSending.change_setsending %}
+                            {% if perms.SetSending.change_SetSending %}
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-warning"
                                         onclick="location.href='{% url 'SetSending:update' sets.pk %}'">
@@ -62,7 +62,7 @@
                                     </svg>
                                 </button>
                                 {% endif %}
-                                {% if perms.SetSending.delete_setsending %}
+                                {% if perms.SetSending.delete_SetSending %}
                                 <button type="button" class="btn btn-danger"
                                         onclick="location.href='{% url 'SetSending:delete' sets.pk %}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -81,7 +81,7 @@
                 </table>
             </form>
         </div>
-        {% if perms.SetSending.add_setsending %}
+        {% if perms.SetSending.change_SetSending %}
         <button type="submit" class="btn btn-block btn-primary"
                 onclick="location.href='{% url 'SetSending:create' %}'">
             Новая рассылка

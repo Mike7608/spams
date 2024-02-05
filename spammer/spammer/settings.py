@@ -188,3 +188,5 @@ NULLABLE = {'null': True, 'blank': True}
 
 INTERVALS = [{"value": 86400, 'text': "Один раз в сутки"}, {"value": 604800, 'text': "Один раз в неделю"},
              {"value": 2592000, 'text': "Один раз в месяц"}]
+
+USER_ID = None

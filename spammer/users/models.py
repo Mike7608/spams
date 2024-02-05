@@ -12,3 +12,16 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    class Meta:
+        # 'Can block users" или "Может блокировать пользователей".
+        permissions = [
+            (
+                'can_block_users',
+                'Может блокировать пользователей'
+            ),
+            (
+                'can_block_SetSending',
+                'Может отключать рассылки'
+            )
+        ]
