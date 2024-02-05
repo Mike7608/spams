@@ -7,6 +7,7 @@ app_name = SetsendingConfig.name
 urlpatterns = [
     path('', SetSendingListView.as_view(), name='list'),
     path('create/', add_sending, name='create'),
+    # path('create/', SetSendingCreateView.as_view(), name='create'),
     path('edit/<int:pk>/', edit_sending, name='update'),
     path('delete/<int:pk>/', SetSendingDeleteView.as_view(), name='delete'),
 ]

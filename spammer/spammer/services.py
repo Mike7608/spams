@@ -1,7 +1,4 @@
 from datetime import datetime
-import pytz
-import tzlocal
-import re
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from django.contrib import messages
@@ -35,14 +32,13 @@ class JobService:
         # Получаем письмо для рассылки
         email: Message = Message.objects.get(id=item_s.message.pk)
 
-        # получаем список адресатов
-        list_a = re.split(pattern=";|\r|\n", string=item_s.list_address)
         list_address = []
 
-        # Чистим список адресатов от пустых значений
-        for item_l in list_a:
-            if len(item_l) > 0:
-                list_address.append(item_l)
+        # получаем список адресатов
+        list_client = item_s.client.all()
+
+        for client in list_client:
+            list_address.append(client.email)
 
         # отправка писем только если есть адресаты
         if len(list_address) > 0:
@@ -103,19 +99,4 @@ class Status:
 
     rus_list = [{'value': 1, 'text': 'Создан'}, {'value': 2, 'text': 'Запущен'}, {'value': 0, 'text': 'Завершен'}]
 
-
-class DateTimeNow:
-    """
-    Класс для полдучения текущей даты в текущй таймзоне
-    """
-    @staticmethod
-    def current_datetime():
-        # получем текущую таймзону
-        local_timezone_key = tzlocal.get_localzone()
-        # получем время
-        local_timezone = pytz.timezone(local_timezone_key.key)
-
-        # Добавление смещения к часовому поясу
-        new_timezone = local_timezone.localize(datetime.now())
-        return new_timezone
 

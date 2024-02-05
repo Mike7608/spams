@@ -37,21 +37,19 @@ def interval_text(pk):
 
 @register.filter()
 def date_start(pk):
-    data = '(нет)'
     sets: SetSending = SetSending.objects.get(id=pk)
-    data = convert_date(sets.time_start)
-    return data
+    date_str = convert_date_str(sets.time_start)
+    return date_str
 
 
 @register.filter()
 def date_end(pk):
-    data = '(нет)'
     sets: SetSending = SetSending.objects.get(id=pk)
-    data = convert_date(sets.time_end)
-    return data
+    date_str = convert_date_str(sets.time_end)
+    return date_str
 
 
-def convert_date(value):
+def convert_date_str(value):
     """
     Процедура возвращает дату в формате дд.мм.гггг | чч.мм
     """

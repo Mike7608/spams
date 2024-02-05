@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from spammer.services import DateTimeNow
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -37,11 +36,11 @@ def add_sending(request):
     """
     dataset = SetSending()
 
-    dataset.time_start = DateTimeNow.current_datetime()
-    dataset.time_end = DateTimeNow.current_datetime()
-    dataset.time_end = dataset.time_end + timedelta(days=1)
+    dataset.time_start = datetime.now()
+    dataset.time_end = dataset.time_start + timedelta(days=1)
 
     client_list = Client.objects.filter(user=request.user.pk)
+
     list_message = Message.objects.filter(user=request.user.pk)
 
     if request.method == 'POST':
@@ -52,6 +51,8 @@ def add_sending(request):
 
         if time_delta >= float(dataset.interval):
             dataset.save()
+
+            save_select_client(request, dataset)  # сохраняем выбранных клиентов
 
             if dataset.status == Status.Running:
                 jobs = JobService()
@@ -65,8 +66,8 @@ def add_sending(request):
 
     data = {'interval': dataset.interval,
             'status': dataset.status,
-            'time_start': dataset.time_start.strftime("%Y-%m-%dT%H:%M"),
-            'time_end': dataset.time_end.strftime("%Y-%m-%dT%H:%M"),
+            'time_start': dataset.time_start,
+            'time_end': dataset.time_end,
             'interval_list': INTERVALS,
             'status_list': Status.rus_list,
             'list_message': list_message,
@@ -85,7 +86,10 @@ def edit_sending(request, pk):
 
     dataset = SetSending.objects.get(id=pk)
 
-    client_list = Client.objects.filter(user=request.user.pk)
+    client_list_temp = Client.objects.filter(user=request.user.pk)
+    client_list_use = dataset.client.all()
+
+    client_list = list(set(client_list_temp) - set(client_list_use))
 
     list_message = Message.objects.filter(user=request.user.pk)
 
@@ -98,6 +102,8 @@ def edit_sending(request, pk):
         if time_delta >= float(dataset.interval):
             dataset.save()
 
+            save_select_client(request, dataset)  # сохраняем выбранных клиентов
+
             jobs = JobService()
             if dataset.status == Status.Running:
                 jobs.add_job(request, dataset)
@@ -108,16 +114,15 @@ def edit_sending(request, pk):
             messages.add_message(request, messages.ERROR, f'Задание имеет неверное значение периода!')
 
     data = {'interval': int(dataset.interval),
-            'time_start': dataset.time_start.strftime("%Y-%m-%dT%H:%M"),
-            'time_end': dataset.time_end.strftime("%Y-%m-%dT%H:%M"),
+            'time_start': dataset.time_start,
+            'time_end': dataset.time_end,
             'status': int(dataset.status),
             'list_message': list_message,
             'interval_list': INTERVALS,
             'status_list': Status.rus_list,
-            'list_address': str(dataset.list_address),
             'id_message': int(dataset.message_id),
             'client_list': client_list,
-            'SetSending_id': int(dataset.pk),
+            'clients': dataset.client
             }
 
     return render(request, 'SetSending/SetSending_form_new.html', context=data)
@@ -131,3 +136,17 @@ def set_data(request, dataset):
     dataset.interval = int(request.POST.get('interval_list'))
     dataset.list_address = request.POST.get("list_address")
 
+
+def save_select_client(request, dataset):
+    """
+    Процедура сохраняет выбранных клиентов
+    :param request:
+    :param dataset:
+    :return:
+    """
+    selected_clients = request.POST.getlist('client_list_select')
+    dataset.client.clear()
+    for item in selected_clients:
+        cl = Client.objects.get(id=item)
+        dataset.client.add(cl)
+        dataset.save()
